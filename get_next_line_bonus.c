@@ -6,11 +6,11 @@
 /*   By: thjonell <thjonell@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 22:27:42 by thjonell          #+#    #+#             */
-/*   Updated: 2020/11/13 17:39:06 by thjonell         ###   ########.fr       */
+/*   Updated: 2020/11/13 18:17:04 by thjonell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static void	ft_joinbuffer(char **tmp, char **buf)
 {
@@ -47,7 +47,7 @@ static int	ft_eof(char **line, char **tmp, char **buf)
 int			get_next_line(int fd, char **line)
 {
 	char		*buf;
-	static char	*tmp;
+	static char	*tmp[FOPEN_MAX];
 	int			ret;
 
 	if (fd >= 0 && BUFFER_SIZE > 0
@@ -56,14 +56,14 @@ int			get_next_line(int fd, char **line)
 		while ((ret = read(fd, buf, BUFFER_SIZE)) >= 0)
 		{
 			buf[ret] = '\0';
-			if (!tmp)
-				tmp = ft_cutstr(buf, '\0');
+			if (!tmp[fd])
+				tmp[fd] = ft_cutstr(buf, '\0');
 			else
-				ft_joinbuffer(&tmp, &buf);
-			if (ft_strchr(tmp, '\n'))
-				return (ft_newline(&*line, &tmp, &buf));
+				ft_joinbuffer(&tmp[fd], &buf);
+			if (ft_strchr(tmp[fd], '\n'))
+				return (ft_newline(&*line, &tmp[fd], &buf));
 			if (ret == 0)
-				return (ft_eof(&*line, &tmp, &buf));
+				return (ft_eof(&*line, &tmp[fd], &buf));
 		}
 	}
 	return (-1);
