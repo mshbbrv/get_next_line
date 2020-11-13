@@ -5,18 +5,15 @@
 int main(void) {
 	int		fd;
 	char	*line;
-	int		ret;
-	//ret = 1;
-	//fd = open("tests/42_char", O_RDONLY);
-	fd = open("wartests/lorem_ipsum", O_RDONLY);
-	//fd = 0;
-	while ((ret = get_next_line(fd, &line)) > 0)
+	
+	fd = open("test", O_RDONLY);
+	while (get_next_line(fd, &line))
 	{
-		printf("ret = %d |%s\n", ret, line);
+		printf("%s\n", line);
 		free(line);
 	}
-	printf("ret = %d |%s\n", ret, line);
-	//free(line);
+	printf("%s\n", line);
+	free(line);
 	close(fd);
     return (0);
 }
